@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 public class GetContactsActivity extends AppCompatActivity {
     private static final String TAG = GetContactsActivity.class.getSimpleName();
@@ -25,8 +26,6 @@ public class GetContactsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_get_contacts);
-
         // TODO(bmchrist): permission priming
 
         if (ContextCompat.checkSelfPermission(this,
@@ -49,6 +48,8 @@ public class GetContactsActivity extends AppCompatActivity {
         } else {
             retrieveContacts();
         }
+        Toast.makeText(this, "Contacts retrieved and logged to console", Toast.LENGTH_LONG).show();
+        finish();
     }
 
     public void retrieveContacts() {

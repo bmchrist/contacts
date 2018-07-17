@@ -14,8 +14,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void getContacts(View view) {
+    public void runGetContactsActivity(View view) {
         Intent intent = new Intent(this, GetContactsActivity.class);
+        startActivity(intent);
+    }
+
+    public void runCreateNoteActivity(View view) {
+        Intent intent = new Intent(this, CreateNoteActivity.class);
         startActivity(intent);
     }
 }
