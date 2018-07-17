@@ -19,6 +19,8 @@ import android.widget.Toast;
 public class GetContactsActivity extends AppCompatActivity {
     private static final String TAG = GetContactsActivity.class.getSimpleName();
 
+    // should be a service probably, but this will change a bunch anyway
+
     // permissions
     public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
 
