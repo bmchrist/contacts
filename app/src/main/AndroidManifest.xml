@@ -21,7 +21,7 @@
         </activity>
 
         <activity
-            android:name=".GetContactsActivity"
+            android:name=".GetContactsPermissionActivity"
             android:parentActivityName=".MainActivity"
             android:label="@string/title_activity_get_contacts"
             android:theme="@android:style/Theme.NoDisplay" />

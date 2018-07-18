@@ -31,6 +31,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         // and apply it
         AutoCompleteTextView textView = findViewById(R.id.editNoteContact);
+        // textView.setOnItemClickListener(onItemClickListener);
         textView.setAdapter(adapter);
     }
 
@@ -39,19 +40,29 @@ public class CreateNoteActivity extends AppCompatActivity {
         String noteContact = ((EditText) findViewById(R.id.editNoteContact)).getText().toString();
         Log.d(TAG, noteBody);
         Log.d(TAG, noteContact);
+        Log.e(TAG, "TODO: implement")
     }
-//
+
+//    // TODO(bmchrist): This feels janky - look for better options once I know more
 //    private AdapterView.OnItemClickListener onItemClickListener =
 //        new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Log.d(TAG,"Clicked item from auto completion list "  + adapterView.getItemAtPosition(i));
+////                Cursor cursor = (CursorWrapper) adapterView.getItemAtPosition(i);
+////                String name = cursor.getString( cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+////                String lookup = cursor.getString( cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+//                String name = "";
+//                String lookup = "";
+//                Log.d(TAG,"Clicked item from auto completion list "  + name + " lookup: " + lookup);
+////                ((EditText) findViewById(R.id.editNoteContact)).setText("test"+name);
+//
 //            }
 //        };
 
     private Cursor getContactsCursor(CharSequence constraint) {
         ContentResolver cr = getContentResolver();
-        String selection = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+" like'%" + constraint +"%'";
+        // TODO(bmchrist): fuzzy search
+        String selection = ContactsContract.Contacts.DISPLAY_NAME+" like'%" + constraint +"%'";
         return cr.query(ContactsContract.Contacts.CONTENT_URI,
                 null, selection, null, null);
     }

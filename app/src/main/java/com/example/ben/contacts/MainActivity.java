@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void runGetContactsActivity(View view) {
-        Intent intent = new Intent(this, GetContactsActivity.class);
+        Intent intent = new Intent(this, GetContactsPermissionActivity.class);
         startActivity(intent);
     }
 
