@@ -10,10 +10,10 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 
-public class ContactListAdapter extends CursorAdapter {
+public class ContactSearchCursorAdapter extends CursorAdapter {
     private LayoutInflater cursorInflater;
 
-    public ContactListAdapter(Context context, Cursor cursor, int flags) {
+    public ContactSearchCursorAdapter(Context context, Cursor cursor, int flags) {
         super(context, cursor, flags);
         cursorInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
