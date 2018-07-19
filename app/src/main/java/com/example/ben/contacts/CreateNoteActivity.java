@@ -19,50 +19,22 @@ import java.util.ArrayList;
 
 public class CreateNoteActivity extends AppCompatActivity {
     private static final String TAG = CreateNoteActivity.class.getSimpleName();
-
-    // todo(ben): decide if this data structure is best
-    // Holds the list of selected contacts
-    // todo(Ben): handle duplicate contacts being added - maybe use a set
-    private ArrayList<NoteContact> noteContacts = new ArrayList<NoteContact>();
-
-    // Declared here so we can access it later to tell it the data is updated
     private ContactListRecyclerViewAdapter recyclerViewAdapter;
 
-
+    // todo(ben): decide if this data structure is best
+    // todo(Ben): handle duplicate contacts being added - maybe use a set
+    // Holds the list of selected contacts
+    private ArrayList<NoteContact> noteContacts = new ArrayList<NoteContact>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_note);
 
-        // --------------
-        // Search Adapter
-        // --------------
-        // Create an adapter for searching contacts
-        // Pretty sure cursor can be null here since we use setFilterQueryProvider below
-        final CursorAdapter adapter = new ContactSearchCursorAdapter(CreateNoteActivity.this, null, 0);
+        // Build views and layout for displaying selected contacts
+        buildSelectedContactsDisplay();
 
-        // Set it to filter the contacts query based on the input constraint from the text field
-        adapter.setFilterQueryProvider(new FilterQueryProvider() {
-            public Cursor runQuery(CharSequence constraint) { return getContactsCursor(constraint); }
-        });
-
-        // and apply it to the view
-        // TODO(bmchrist): is there a selector/element that is better than autocompletetext (eg drowpdown w/ search?)
-        // if not, decide how to handle invalid text and make it clear it won't be used
-        AutoCompleteTextView textView = findViewById(R.id.editNoteContact);
-        textView.setOnItemClickListener(onItemClickListener); // todo(bmchrist): itemSelected does not work - why?
-        textView.setAdapter(adapter);
-
-        // -------------------------
-        // Display Selected Contacts
-        // -------------------------
-        // Create list view to show selected contacts
-        RecyclerView recyclerView = findViewById(R.id.contactsList);
-        // TODO(bmchrist): better layout
-        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
-        recyclerViewAdapter = new ContactListRecyclerViewAdapter(noteContacts);
-        recyclerView.setAdapter(recyclerViewAdapter);
+        buildContactSelector();
     }
 
     public void createNote(View view) {
@@ -72,6 +44,42 @@ public class CreateNoteActivity extends AppCompatActivity {
         Log.d(TAG, noteContact);
         // TODO(ben): implement
         Log.e(TAG, "TODO: implement");
+    }
+
+    private void buildContactSelector() {
+        // --------------
+        // Search Adapter
+        // --------------
+        // Create an adapter for searching contacts
+        // Pretty sure cursor can be null here since we use setFilterQueryProvider below
+        final CursorAdapter adapter = new ContactSearchCursorAdapter(CreateNoteActivity.this, null, 0);
+
+        // Set it to filter the contacts query based on the input constraint from the text field
+        adapter.setFilterQueryProvider(new FilterQueryProvider() {
+            public Cursor runQuery(CharSequence constraint) {
+                ContentResolver cr = getContentResolver();
+                // TODO(bmchrist): fuzzy search
+                String selection = ContactsContract.Contacts.DISPLAY_NAME+" like'%" + constraint +"%'";
+                return cr.query(ContactsContract.Contacts.CONTENT_URI,
+                        null, selection, null, null);
+            }
+        });
+
+        // and apply it to the view
+        // TODO(bmchrist): is there a selector/element that is better than autocompletetext (eg drowpdown w/ search?)
+        // if not, decide how to handle invalid text and make it clear it won't be used
+        AutoCompleteTextView textView = findViewById(R.id.editNoteContact);
+        textView.setOnItemClickListener(onItemClickListener); // todo(bmchrist): itemSelected does not work - why?
+        textView.setAdapter(adapter);
+    }
+
+    private ContactListRecyclerViewAdapter buildSelectedContactsDisplay() {
+        RecyclerView recyclerView = findViewById(R.id.contactsList);
+        // TODO(bmchrist): better layout
+        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        recyclerViewAdapter = new ContactListRecyclerViewAdapter(noteContacts);
+        recyclerView.setAdapter(recyclerViewAdapter);
+        return recyclerViewAdapter;
     }
 
     // TODO(bmchrist): This feels janky - look for better options once I know more
@@ -87,20 +95,11 @@ public class CreateNoteActivity extends AppCompatActivity {
 
                 // Add to list of selected contacts
                 noteContacts.add(noteContact);
-                recyclerViewAdapter.notifyDataSetChanged(); // TODO(ben): Add item to position is probably better
+                recyclerViewAdapter.notifyDataSetChanged();
+                // TODO(ben): Add item to position is probably better
 
                 // Clear out the entry so we can add more
                 ((EditText) findViewById(R.id.editNoteContact)).setText("");
-
             }
         };
-
-    private Cursor getContactsCursor(CharSequence constraint) {
-        ContentResolver cr = getContentResolver();
-        // TODO(bmchrist): fuzzy search
-        String selection = ContactsContract.Contacts.DISPLAY_NAME+" like'%" + constraint +"%'";
-        return cr.query(ContactsContract.Contacts.CONTENT_URI,
-                null, selection, null, null);
-    }
-
 }
