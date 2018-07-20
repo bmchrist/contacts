@@ -2,28 +2,33 @@ package com.example.ben.contacts;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class ContactListRecyclerViewAdapter extends RecyclerView.Adapter<ContactListRecyclerViewAdapter.ViewHolder> {
+    private static final String TAG = CreateNoteActivity.class.getSimpleName();
+
     private ArrayList<NoteContact> mDataset;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    // todo not totally sure what's going on here
+    // Store a reference to the text element for displaying the contact name
+    // and the "x" imageButton for removing the contact
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
+        // This is used by bindViewHolder to get the text view element to update it
         public TextView mTextView;
-        public ViewHolder(TextView v) {
+        public View mRemoveButton;
+
+        public ViewHolder(ViewGroup v) {
             super(v);
-            mTextView = v;
+            mTextView = v.findViewById(R.id.note_contact_recycler_item_text);
+            mRemoveButton = v.findViewById(R.id.note_contact_recycler_item_remove);
         }
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
+    // mDataSet will hold our official list of contacts for display and later for submitting
     public ContactListRecyclerViewAdapter(ArrayList<NoteContact> myDataset) {
         mDataset = myDataset;
     }
@@ -31,17 +36,25 @@ public class ContactListRecyclerViewAdapter extends RecyclerView.Adapter<Contact
     // Create new views (invoked by the layout manager)
     @Override
     public ContactListRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        TextView v = (TextView) LayoutInflater.from(parent.getContext())
+        ViewGroup v = (ViewGroup) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.note_contact_recycler_item_layout, parent, false);
         return new ViewHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+    // Builds the listed contacts views (using note_contact_recycler_item_layout)
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+        // When building the viewholder (the data element), get the right element for this position
+        //      set the text, and set a listener to remove it
         viewHolder.mTextView.setText(mDataset.get(position).getName());
+
+        viewHolder.mRemoveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDataset.remove(position); // returns the NoteContact that was removed
+                notifyItemRemoved(position);
+            }
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)

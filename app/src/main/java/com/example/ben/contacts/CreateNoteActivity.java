@@ -14,7 +14,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -35,14 +34,14 @@ public class CreateNoteActivity extends AppCompatActivity {
         // Build views and layout for displaying selected contacts
         buildSelectedContactsDisplay();
 
+        // Build autocompletetext for choosing contacts
         buildContactSelector();
     }
 
     public void createNote(View view) {
         String noteBody = ((EditText) findViewById(R.id.editNoteBody)).getText().toString();
-        String noteContact = ((EditText) findViewById(R.id.editNoteContact)).getText().toString();
         Log.d(TAG, noteBody);
-        Log.d(TAG, noteContact);
+        Log.d(TAG, noteContacts.toString());
         // TODO(ben): implement
         Log.e(TAG, "TODO: implement");
     }
@@ -68,15 +67,14 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         // and apply it to the view
         // TODO(bmchrist): is there a selector/element that is better than autocompletetext (eg drowpdown w/ search?)
-        // if not, decide how to handle invalid text and make it clear it won't be used
+        //      if not, decide how to handle invalid text and make it clear it won't be used
         AutoCompleteTextView textView = findViewById(R.id.editNoteContact);
-        textView.setOnItemClickListener(onItemClickListener); // todo(bmchrist): itemSelected does not work - why?
+        textView.setOnItemClickListener(onItemClickListener); // todo(bmchrist): itemSelected does not work - why? (this works fine though)
         textView.setAdapter(adapter);
     }
 
     private ContactListRecyclerViewAdapter buildSelectedContactsDisplay() {
         RecyclerView recyclerView = findViewById(R.id.contactsList);
-        // TODO(bmchrist): better layout
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerViewAdapter = new ContactListRecyclerViewAdapter(noteContacts);
         recyclerView.setAdapter(recyclerViewAdapter);
@@ -90,14 +88,13 @@ public class CreateNoteActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 NoteContact noteContact = new NoteContact(
-                        cursor.getString( cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)),
-                        cursor.getString( cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY))
+                    cursor.getString( cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)),
+                    cursor.getString( cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY))
                 );
 
                 // Add to list of selected contacts
                 noteContacts.add(noteContact);
-                recyclerViewAdapter.notifyDataSetChanged();
-                // TODO(ben): Add item to position is probably better
+                recyclerViewAdapter.notifyItemInserted(noteContacts.size()-1);
 
                 // Clear out the entry so we can add more
                 ((EditText) findViewById(R.id.editNoteContact)).setText("");

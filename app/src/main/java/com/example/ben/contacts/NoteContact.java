@@ -16,5 +16,8 @@ public class NoteContact {
     public String getLookup() {
         return mLookup;
     }
+
+    @Override
+    public String toString(){ return getName(); }
     // if we do a set, figure out hash method todo(ben) -- probably use lookup key
 }
