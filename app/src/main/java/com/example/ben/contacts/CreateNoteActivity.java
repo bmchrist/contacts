@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -76,7 +77,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private ContactListRecyclerViewAdapter buildSelectedContactsDisplay() {
         RecyclerView recyclerView = findViewById(R.id.contactsList);
         // TODO(bmchrist): better layout
-        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerViewAdapter = new ContactListRecyclerViewAdapter(noteContacts);
         recyclerView.setAdapter(recyclerViewAdapter);
         return recyclerViewAdapter;
