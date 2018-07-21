@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Contacts</string>
-    <string name="button_get_contacts">Get Contacts Permission</string>
+    <string name="button_get_contacts_permission">Get Contacts Permission</string>
+    <string name="button_list_contacts">List Notes</string>
     <string name="button_create_note">Create Note</string>
     <string name="title_activity_get_contacts">Get Contacts Permission</string>
+    <string name="title_activity_create_note">Create Note</string>
     <string name="note_contact_hint">Type a contact's name…</string>
     <string name="note_body_hint">Please enter a note…</string>
 </resources>

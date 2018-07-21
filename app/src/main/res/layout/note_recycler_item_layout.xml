@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Make a container and then add an x icon into container? need to set other things to grab textview part-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/note_recycler_item"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="#ccc"
+    android:padding="5dp"
+    >
+
+    <TextView
+        android:id="@+id/note_recycler_item_text"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:paddingRight="5dp"
+        />
+</LinearLayout>

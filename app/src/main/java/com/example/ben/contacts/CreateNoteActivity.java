@@ -1,5 +1,6 @@
 package com.example.ben.contacts;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 public class CreateNoteActivity extends AppCompatActivity {
     private static final String TAG = CreateNoteActivity.class.getSimpleName();
     private ContactListRecyclerViewAdapter recyclerViewAdapter;
+    private NoteViewModel mNoteViewModel;
 
     // todo(ben): decide if this data structure is best
     // todo(Ben): handle duplicate contacts being added - maybe use a set
@@ -31,6 +33,8 @@ public class CreateNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_note);
 
+        mNoteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+
         // Build views and layout for displaying selected contacts
         buildSelectedContactsDisplay();
 
@@ -39,11 +43,10 @@ public class CreateNoteActivity extends AppCompatActivity {
     }
 
     public void createNote(View view) {
-        String noteBody = ((EditText) findViewById(R.id.editNoteBody)).getText().toString();
-        Log.d(TAG, noteBody);
-        Log.d(TAG, noteContacts.toString());
-        // TODO(ben): implement
-        Log.e(TAG, "TODO: implement");
+        String noteContent = ((EditText) findViewById(R.id.editNoteBody)).getText().toString();
+        Note note = new Note(noteContent);
+        // TODO(ben): save more than just note body
+        mNoteViewModel.insert(note);
     }
 
     private void buildContactSelector() {
